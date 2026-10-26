@@ -296,7 +296,8 @@ public class InterfazIncidentes {
 
             ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            ventana.setSize(1000, 700);
+            ventana.pack();
+            ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana.setLocationRelativeTo(null);
             ventana.setVisible(true);
         });
