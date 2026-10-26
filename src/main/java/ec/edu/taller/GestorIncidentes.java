@@ -104,4 +104,20 @@ public class GestorIncidentes {
         colaIncidentes.add(new IncidenteSeguridad("A7", "PHISHING", "Enlace falso ", 3));
         colaIncidentes.add(new IncidenteSeguridad("A8", "FUGA_DATOS", "Documentos privados filtrados", 2));
     }
+
+    public GestorIncidentes(int capacidadMaxima, boolean cargarEjemplos) {
+
+        this(capacidadMaxima);
+
+        if (cargarEjemplos) {
+
+            if (capacidadMaxima < 8) {
+                throw new IllegalArgumentException(
+                        "Se necesitan al menos 8 espacios para cargar los ejemplos."
+                );
+            }
+
+            predefinirIncidentes();
+        }
+    }
 }

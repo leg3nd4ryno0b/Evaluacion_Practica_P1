@@ -28,7 +28,7 @@ public class InterfazIncidentes {
     private JLabel lblTituloListado;
     private JTextArea txtListado;
 
-    private final GestorIncidentes gestor = new GestorIncidentes(10);
+    private final GestorIncidentes gestor = new GestorIncidentes(10, true);
 
     public InterfazIncidentes() {
 
