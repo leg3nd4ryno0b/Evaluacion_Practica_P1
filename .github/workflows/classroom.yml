@@ -1,0 +1,109 @@
+name: Autograding Tests
+
+'on':
+  - push
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Pruebas registrarIncidente
+        id: registrar-incidente
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: registrarIncidente
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesRegistrarTest test
+          timeout: 10
+          max-score: 20
+
+      - name: Pruebas existeIncidente
+        id: existe-incidente
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: existeIncidente
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesExisteTest test
+          timeout: 10
+          max-score: 15
+
+      - name: Pruebas consultarSiguienteIncidente
+        id: consultar-siguiente-incidente
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: consultarSiguienteIncidente
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesConsultarTest test
+          timeout: 10
+          max-score: 10
+
+      - name: Pruebas atenderSiguienteIncidente
+        id: atender-siguiente-incidente
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: atenderSiguienteIncidente
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesAtenderTest test
+          timeout: 10
+          max-score: 15
+
+      - name: Pruebas contarIncidentesPendientes
+        id: contar-incidentes-pendientes
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: contarIncidentesPendientes
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesContarTest test
+          timeout: 10
+          max-score: 10
+
+      - name: Pruebas consultarEspaciosDisponibles
+        id: consultar-espacios-disponibles
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: consultarEspaciosDisponibles
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesEspaciosTest test
+          timeout: 10
+          max-score: 10
+
+      - name: Pruebas listarIncidentes
+        id: listar-incidentes
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: listarIncidentes
+          setup-command: ''
+          command: mvn -B -Dtest=GestorIncidentesListarTest test
+          timeout: 10
+          max-score: 10
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          REGISTRAR-INCIDENTE_RESULTS: "${{ steps.registrar-incidente.outputs.result }}"
+          EXISTE-INCIDENTE_RESULTS: "${{ steps.existe-incidente.outputs.result }}"
+          CONSULTAR-SIGUIENTE-INCIDENTE_RESULTS: "${{ steps.consultar-siguiente-incidente.outputs.result }}"
+          ATENDER-SIGUIENTE-INCIDENTE_RESULTS: "${{ steps.atender-siguiente-incidente.outputs.result }}"
+          CONTAR-INCIDENTES-PENDIENTES_RESULTS: "${{ steps.contar-incidentes-pendientes.outputs.result }}"
+          CONSULTAR-ESPACIOS-DISPONIBLES_RESULTS: "${{ steps.consultar-espacios-disponibles.outputs.result }}"
+          LISTAR-INCIDENTES_RESULTS: "${{ steps.listar-incidentes.outputs.result }}"
+        with:
+          runners: registrar-incidente,existe-incidente,consultar-siguiente-incidente,atender-siguiente-incidente,contar-incidentes-pendientes,consultar-espacios-disponibles,listar-incidentes
